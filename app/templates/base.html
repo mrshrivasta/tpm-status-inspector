@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}TPM Status Inspector — Real TPM 1.2/2.0 Device & PCR Bank Inspector{% endblock %}</title>
+
+<!-- SEO -->
+<meta name="description" content="{% block meta_description %}TPM Status Inspector is an open-source security tool that inspects REAL TPM chip state on Linux via /sys/class/tpm, /dev/tpm*, and tpm2-tools to report TPM presence, version (1.2 vs 2.0), device-node permissions, and resource-manager availability. Free CLI and web app by Karanam Shrivasta.{% endblock %}">
+<meta name="keywords" content="TPM status inspector, TPM 2.0 checker, dev tpm permission audit, tpm2-tools scanner, trusted platform module inspector, PCR bank checker, Karanam Shrivasta security tools">
+<meta name="author" content="Karanam Shrivasta">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/mrshrivasta">
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="TPM Status Inspector — by Karanam Shrivasta">
+<meta property="og:description" content="Real, no-mock-data inspection of TPM chip presence, version, and device-node security on this machine.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TPM Status Inspector">
+
+<!-- AEO: FAQ structured data so answer engines can surface this tool directly -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the TPM Status Inspector check?",
+      "acceptedAnswer": {"@type": "Answer", "text": "It inspects real TPM chips via /sys/class/tpm and /dev/tpm*, reporting whether a TPM is present, its version (1.2 legacy vs 2.0), whether device nodes and the kernel resource manager are available, and whether device-node permissions are overly permissive — using live data, never sample data."}
+    },
+    {
+      "@type": "Question",
+      "name": "Who should use the TPM Status Inspector?",
+      "acceptedAnswer": {"@type": "Answer", "text": "System administrators and security engineers verifying TPM presence, version, and device security on Linux systems they own or are authorized to assess."}
+    },
+    {
+      "@type": "Question",
+      "name": "Is the TPM Status Inspector a replacement for a professional security audit?",
+      "acceptedAnswer": {"@type": "Answer", "text": "No. It is an educational and productivity aid only. It does not replace a certified penetration test, compliance audit, or professional security assessment. See the disclaimer in the README."}
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="disclaimer-banner">
+  ⚠️ <strong>SECURITY &amp; LEGAL DISCLAIMER:</strong> Use this tool <strong>ONLY</strong> on systems you own or are explicitly authorized to test.
+  Provided <strong>"AS IS", WITHOUT WARRANTY OF ANY KIND</strong>. Not a substitute for a professional security audit. The author,
+  <strong>Karanam Shrivasta</strong>, accepts <strong>NO LIABILITY</strong> for any damage, data loss, downtime, or legal consequences arising from
+  use or misuse of this software. By using this tool you accept full responsibility for your actions. See the README for the complete disclaimer.
+</div>
+
+{% if current_user.is_authenticated %}
+<nav class="navbar">
+  <div class="nav-brand">🔐 TPM Status Inspector</div>
+  <div class="nav-links">
+    <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+    <a href="{{ url_for('logs.index') }}">Logs</a>
+    <a href="{{ url_for('alerts.index') }}">Alerts</a>
+    <a href="{{ url_for('incidents.index') }}">Incidents</a>
+    <a href="{{ url_for('analytics.index') }}">Analytics</a>
+    <a href="{{ url_for('reports.index') }}">Reports</a>
+    <a href="{{ url_for('settings.index') }}">Settings</a>
+    <a href="{{ url_for('auth.logout') }}">Logout ({{ current_user.username }})</a>
+  </div>
+</nav>
+{% endif %}
+
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="watermark-footer">
+  <p>
+    TPM Status Inspector &copy; {{ 2026 }} — Developed by <strong>Karanam Shrivasta</strong>
+    &middot; <a href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>
+    &middot; <a href="{{ linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>
+  </p>
+  <p class="footer-disclaimer">For authorized security auditing and educational use only. No warranty. Use at your own risk.</p>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
